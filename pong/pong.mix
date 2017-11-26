@@ -1,0 +1,142 @@
+variable val
+
+variable x,y,c,xr,yr,tx,ty,yo,bp
+
+variable player1Y,player2Y
+
+define REFRESH   = 32620
+define GC1DATA   = 0x7800
+define GC2DATA   = 0x7808
+define GC1Rumble = 0x7E6C
+define GC2Rumble = 0x7E6D
+
+INPUTDRIVER TWOPADS
+
+while(true) {
+
+  player1Y = mem(0x7800) >>3    
+  if(player1Y<2) {
+    player1Y=2
+  }
+  if(player1Y>29) {
+    player1Y=29
+  }
+  player1Y=31-player1Y
+
+  c=0
+  for(y=0;y<32;++y) {
+    x=2
+    call plot    
+  }
+  c=1
+  for(y=player1Y-2;y<player1Y+3;++y) {
+    call plot
+  }
+
+  player2Y = mem(0x7808) >>3  
+  player
+  if(player2Y<2) {
+    player2Y=2
+  }
+  if(player2Y>29) {
+    player2Y=29
+  }
+  player2Y=31-player2Y
+
+  c=0
+  for(y=0;y<32;++y) {
+    x=45
+    call plot    
+  }
+  c=1
+  for(y=player2Y-2;y<player2Y+3;++y) {
+    call plot
+  }
+ 
+  mem(REFRESH) = 1
+  pause 100ms
+
+}
+
+
+
+
+// X,Y,C
+Plot:
+
+// There are 4 quadrants. Figure out which we are in.
+
+tx = x
+ty = y
+
+if(y<16) {
+
+  if(x<24) {
+
+    // Upper left
+    xr = tx * 2   // Two bytes per column
+    yr = ty / 8   // Byte offset in column
+    yo = ty % 8   // Bit offset in byte
+
+    bp = 128 >> yo
+
+    xr = 191 - xr
+    xr = xr - yr
+    
+  } else {
+
+    // Upper right
+    tx = tx - 24
+    xr = tx * 2   // Two bytes per column
+    yr = ty / 8   // Byte offset in column
+    yo = ty % 8   // Bit offset in byte
+
+    bp = 128 >> yo
+
+    xr = 143 - xr
+    xr = xr - yr    
+
+  }
+
+} else {
+
+  if(x<24) {
+
+    // Lower left
+    ty=ty-16
+    xr = tx * 2   // Two bytes per column
+    yr = ty / 8   // Byte offset in column
+    yo = ty % 8   // Bit offset in byte
+
+    bp = 1 << yo
+
+    xr = 48 + xr
+    xr = xr + yr    
+
+
+  } else {
+
+    // Lower right
+    ty=ty-16
+    tx=tx-24
+    xr = tx * 2   // Two bytes per column
+    yr = ty / 8   // Byte offset in column
+    yo = ty % 8   // Bit offset in byte
+
+    bp = 1 << yo
+
+    xr = 0 + xr
+    xr = xr + yr    
+
+  }  
+
+}
+
+if(c!=0) {
+  mem(xr) = mem(xr) | bp  
+} else {
+  bp = ~bp
+  mem(xr) = mem(xr) & bp
+}
+
+return

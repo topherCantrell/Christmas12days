@@ -1,0 +1,121 @@
+
+; The 12 Days of Christmas is a collections of segments played repeatedly and
+; recursively.
+
+%%OnTheFirst ; 18
+;
+; On the true 1st day there is a pickup note at the end of the
+; measure for the "a". All other days are plural and skip the
+; pickup note.
+;
+VOICE5 | 8D4 D  | 4D 8G G 4G 8F# G        | A B C+ A- 4.B  8C+
+VOICE0 | 8D4 D  | 4D 8G G 4G 8F# G        | A B C+ A- 2B
+VOICE1 | 4R     | 2B3 D+                  | F#    D
+VOICE2 | 4R     | 2R  2B3                 | D+    B-
+VOICE3 | 4R     | 2G2 4G 4A               | 2D+   2G
+VOICE4 | 4R     | 1R                      | 1R
+VOICE* | 8X 8X  | 8X 8X 8X 8X 8X 8X 8X 8X | 8X 8X 8X 8X 8X 8X 8X 8X
+
+%%OnTheFirstNoPickup ; 18
+;
+VOICE5 | 8D4 D  | 4D 8G G 4G 8F# G        | A B C+ A- 4.B  8R
+VOICE0 | 8D4 D  | 4D 8G G 4G 8F# G        | A B C+ A- 2B
+VOICE1 | 4R     | 2B3 D+                  | F#    D
+VOICE2 | 4R     | 2R  2B3                 | D+    B-
+VOICE3 | 4R     | 2G2 4G 4A               | 2D+   2G
+VOICE4 | 4R     | 1R                      | 1R
+VOICE* | 8X 8X  | 8X 8X 8X 8X 8X 8X 8X 8X | 8X 8X 8X 8X 8X 8X 8X 8X
+
+%%SixThroughTwelve ; 6
+;
+VOICE5 | 4D5 8A- B C+ A-
+VOICE0 | 4D5 8A- B 4C+
+VOICE1 | 2.F4#
+VOICE2 | 2.D4
+VOICE3 | 2.A3
+VOICE4 | 2.D3
+VOICE* | 8X 8X 8X 8X 8X 8X
+
+%%Five ; 16
+;
+VOICE5  2D5 4E C# 2.D 4R
+VOICE0  2D5 4E C# 1D
+VOICE1  2B4 4G G  1F#
+VOICE2  2G4 4R D  2.A3 4C+
+VOICE3  2G3 A 1D
+VOICE4  1R 1R
+VOICE*  8X 8X 8X 8X 8X 8X 8X 8X | 8X 8X 8X 8X 8X 8X 8X 8X
+
+%%One ; 14
+;
+VOICE5  4D5 8E 8C 8B- 8G 4A  | 2.G |
+VOICE0  4D5 8E C B- G 4A  | 2.G
+VOICE1  4B4 8C+ 8R 8G- 8R 4F#  |  2.D
+VOICE2  4G4 8G 8R 8D 8R 4C | 2.B-
+VOICE3  4G3 4C 4G 4D | 2.G
+VOICE4  1R 2.R
+VOICE*  8X 8X 8X 8X 8X 8X 8X 8X | 8X 8X 8X 8X 8X 8X
+
+; There are two forms of days 4, 3, and 2. One form "before" we get to 5
+; and one form "after" we do 5.
+
+
+%%FourBefore ; 6
+;
+VOICE5  4D5 8A- B 4C+
+VOICE0  4D5 8A- B 4C+ 
+VOICE1  2.F4#
+VOICE2  2.D4
+VOICE3  2.A3
+VOICE4  2.R
+VOICE*  8X 8X 8X 8X 8X 8X
+
+%%ThreeBefore ; 6
+;
+VOICE5  4D5 8A- B 4C+
+VOICE0  4D5 8A- B 4C+
+VOICE1  2.F4#
+VOICE2  2.D4
+VOICE3  2.A3
+VOICE4  2.R
+VOICE*  8X 8X 8X 8X 8X 8X
+
+%%TwoBefore ; 8
+;
+VOICE5  4D5 8A- B 4C+ 8B- C+ 
+VOICE0  4D5 8A- 8B 4C+ 8B- 8C+
+VOICE1  1D4
+VOICE2  1D4
+VOICE3  1A3
+VOICE4  1R
+VOICE*  8X 8X 8X 8X 8X 8X 8X 8X
+
+%%FourAfter ; 6
+;
+VOICE5  8D5 C B- A 4G
+VOICE0  8D5 C B- A 4G
+VOICE1  2G4 4D
+VOICE2  2D4 4B-
+VOICE3  2B3 4B-
+VOICE4  2G3 4R
+VOICE*  8X 8X 8X 8X 8X 8X 
+
+%%ThreeAfter ; 6
+;
+VOICE5  4C5 E- G
+VOICE0  4C5 E- G
+VOICE1  4G4 C E
+VOICE2  4E4 2R
+VOICE3  2C3 4C
+VOICE4  2.R
+VOICE*  8X 8X 8X 8X 8X 8X
+
+%%TwoAfter ; 8
+;
+VOICE5  8A4 G F# E 4D 8B C+
+VOICE0  8A4 G F# E 4D 8B C+
+VOICE1  2C4# 2A-
+VOICE2  2A3 2F3#
+VOICE3  2E3 2D
+VOICE4  2A2 2R
+VOICE*  8X 8X 8X 8X 8X 8X 8X 8X 

@@ -1,0 +1,171 @@
+
+define renderPage    = 0x000
+define cachePage     = 0x001
+define nextCluster    = 0x002
+define numFrames     = 0x003
+define x             = 0x004
+define nextToDo      = 0x005
+
+$renderPage = 0
+$cachePage = 1
+
+// #Frames   Content         Clusters
+// 18        OnTheNthDay     0,1
+//  6        12              2
+//  6        11              3
+//  6        10              4
+//  6        9               5
+//  6        8               6
+//  6        7               7
+//  6        6               8
+// 16        5a, 5b          9, 10 
+//  6        4               11
+//  6        3               12
+//  8        2               13
+// 14        1a, 1b          14, 15
+
+// Prepare for "On the Nth day"
+loadCluster $cachePage,0
+
+$nextToDo = 14
+CALL OnTheNthDay
+CALL day1
+$nextToDo  = 13
+CALL OnTheNthDay
+CALL day2
+$nextToDo  = 12
+CALL OnTheNthDay
+CALL day3
+$nextToDo  = 11
+CALL OnTheNthDay
+CALL day4
+$nextToDo  = 9
+CALL OnTheNthDay
+CALL day5
+$nextToDo  = 8
+CALL OnTheNthDay
+CALL day6
+$nextToDo  = 7
+CALL OnTheNthDay
+CALL day7
+$nextToDo  = 6
+CALL OnTheNthDay
+CALL day8
+$nextToDo  = 5
+CALL OnTheNthDay
+CALL day9
+$nextToDo  = 4
+CALL OnTheNthDay
+CALL day10
+$nextToDo  = 3
+CALL OnTheNthDay
+CALL day11
+$nextToDo  = 2
+CALL OnTheNthDay
+CALL day12
+
+STOP
+
+FlipPages:
+  $cachePage  = $cachePage  + 1
+  $cachePage  = $cachePage  & 1
+  $renderPage = $renderPage + 1
+  $renderPage = $renderPage & 1
+RETURN
+
+// $nextCluster = next cluster to load
+// $numFrames = number of frames in current cluster
+ShowCluster:
+  call FlipPages                       // Swap cache and active pages
+  WAITONTICK                           // Wait for the music trigger
+  RENDERFRAME $renderPage, 0           // Draw first frame on new page
+  LOADCLUSTER $cachePage, $nextCluster // Start loading the next sector  
+  for($x=1;x<$numFrames;$x=$x+1) {     // Loop over the remaining frames               
+    WAITONTICK                         // Wait for the music trigger
+    RENDERFRAME $renderPage, $x        // Draw the next frame    
+  }
+  return
+  
+
+// Assumes that 0 is cached
+OnTheNthDay:
+  $nextCluster = 1
+  $numFrames = 9
+  call ShowCluster
+  $nextCluster = $nextToDo
+  $numFrames = 9
+  call ShowCluster
+RETURN
+
+// Assumes that sector 2 is cached
+day12:
+  $numFrames = 6
+  $nextCluster = 3
+  call ShowCluster
+
+day11:
+  $numFrames = 6
+  $nextCluster = 4
+  call ShowCluster
+
+day10:
+  $numFrames = 6
+  $nextCluster = 5
+  call ShowCluster
+
+day9:
+  $numFrames = 6
+  $nextCluster = 6
+  call ShowCluster
+
+day8:
+  $numFrames = 6
+  $nextCluster = 7
+  call ShowCluster
+
+day7:
+  $numFrames = 6
+  $nextCluster = 8
+  call ShowCluster
+
+day6:
+  $numFrames = 6
+  $nextCluster = 9
+  call ShowCluster
+
+day5:
+  $numFrames = 8
+  $nextCluster = 10
+  call ShowCluster
+  $numFrames = 8
+  $nextCluster = 11
+  call ShowCluster
+
+day4:
+  $numFrames = 6
+  $nextCluster = 12
+  call ShowCluster
+
+day3:
+  $numFrames = 6
+  $nextCluster = 13
+  call ShowCluster
+
+day2:
+  $numFrames = 8
+  $nextCluster = 14
+  call ShowCluster
+
+day1:
+  $numFrames = 7
+  $nextCluster = 15
+  call ShowCluster
+  $numFrames = 7
+  $nextCluster = 0  // Back to the Nth day
+  call ShowCluster
+
+RETURN
+
+
+
+

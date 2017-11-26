@@ -1,0 +1,828 @@
+<BlendConfiguration>
+
+<!--
+
+
+
+
+
+
+    MIX
+
+
+
+
+
+
+-->
+
+  <Processor name="MIX" call="CALL" return="RETURN" jump="GOTO @PASS@">
+
+    <Modules>      
+      <Module>Flow</Module>
+    </Modules>
+
+    <Conditions left="true" right="true"> 
+
+      <Condition symbol="==">
+          <Code>@LEFT@-@RIGHT@;GOTO-COND @PASS@, IF_E;GOTO @FAIL@</Code>   
+          <Code>@LEFT@-@RIGHT@;GOTO-COND @FAIL@, IF_NE;GOTO @PASS@</Code>                 
+      </Condition>
+
+      <Condition symbol="!=">
+          <Code>@LEFT@-@RIGHT@;GOTO-COND @PASS@, IF_NE;GOTO @FAIL@</Code>  
+          <Code>@LEFT@-@RIGHT@;GOTO-COND @FAIL@, IF_E;GOTO @PASS@</Code>        
+      </Condition>
+
+      <Condition symbol="&lt;">
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @PASS@, IF_B;GOTO @FAIL@</Code>  
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @FAIL@, IF_AE;GOTO @PASS@</Code>      
+      </Condition>
+
+      <Condition symbol="&gt;=">
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @PASS@, IF_AE;GOTO @FAIL@</Code>
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @FAIL@, IF_B;GOTO @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&lt;=">
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @PASS@, IF_BE;GOTO @FAIL@</Code>
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @FAIL@, IF_A;GOTO @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;">
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @PASS@, IF_A;GOTO @FAIL@</Code>
+        <Code>@LEFT@-@RIGHT@;GOTO-COND @FAIL@, IF_BE;GOTO @PASS@</Code>
+      </Condition>  
+      
+    </Conditions>
+
+    <Conditions left="false" right="false">            
+
+      <Condition symbol="CARRY">
+          <Code>GOTO-COND @PASS@, IF_C;GOTO @FAIL@</Code>
+      </Condition>
+
+      <Condition symbol="NOTCARRY">
+          <Code>GOTO-COND @PASS@, IF_NC;GOTO @FAIL@</Code>
+      </Condition>
+
+      <Condition symbol="ZERO">
+          <Code>GOTO-COND @PASS@, IF_Z;GOTO @FAIL@</Code>
+      </Condition>
+
+      <Condition symbol="NOTZERO">
+          <Code>GOTO-COND @PASS@, IF_NZ;GOTO @FAIL@</Code>
+      </Condition>
+
+      <Condition symbol="true">
+        <Code>GOTO @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="false">
+        <Code>GOTO @FAIL@</Code>
+      </Condition>
+
+    </Conditions>
+
+  </Processor>
+
+<!--
+
+
+
+
+
+
+    6502
+
+
+
+
+
+
+-->
+
+  <Processor name="6502" call="JSR @PASS@" return="RTS" jump="JMP  @PASS@"> 
+
+    <Modules>      
+      <Module>Number</Module>
+      <Module>Subroutines</Module>
+      <Module>Constants</Module>
+      <Module>Structures</Module>
+      <Module>Data</Module>
+      <Module>Flow</Module>
+      <Module>Substitutions</Module>
+    </Modules>
+  
+    <!-- LEFT-OP-RIGHT conditions like "A!=5" -->      
+
+    <Conditions left="true" right="true">      
+
+      <Compare left="A" code="CMP   @RIGHT@"/>
+      <Compare left="X" code="CPX   @RIGHT@"/>
+      <Compare left="Y" code="CPY   @RIGHT@"/>                  
+
+      <!-- EQUAL and NOT-EQUAL -->
+
+      <Condition symbol="==">
+        <Code>@COMPARE@;BEQ @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BNE @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="!=">
+        <Code>@COMPARE@;BNE @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BEQ @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <!-- Unsigned compares -->
+
+      <!-- The 6502 sets the C flag if NO-BORROW ... backwards from the 8080 family -->
+
+      <Condition symbol="&lt;">
+        <Code>@COMPARE@;BCC @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BCS @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;=">
+        <Code>@COMPARE@;BCS @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BCC @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&lt;=">
+        <Code>@COMPARE@;BEQ @PASS@;BCC @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BEQ @PASS@;BCS @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;">
+        <Code>@COMPARE@;BEQ @FAIL@;BCS @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BEQ @FAIL@;BCC @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <!-- Signed compares -->
+
+      <Condition symbol="S&lt;">
+        <Code>@COMPARE@;BMI @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BPL @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="S&gt;=">
+        <Code>@COMPARE@;BPL @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BMI @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="S&lt;=">
+        <Code>@COMPARE@;BEQ @PASS@;BMI @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BEQ @PASS@;BPL @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="S&gt;">
+        <Code>@COMPARE@;BEQ @FAIL@;BPL @PASS@;JMP @FAIL@</Code>
+        <Code>@COMPARE@;BEQ @FAIL@;BMI @FAIL@;JMP @PASS@</Code>  
+      </Condition>
+
+    </Conditions>  
+
+    <!-- no-operand conditions like flag-checks, true, and false -->
+
+    <Conditions left="false" right="false">
+
+      <Condition symbol="ZERO_SET">
+        <Code>BEQ @PASS@;JMP @FAIL@</Code>
+        <Code>BNE @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="ZERO_CLEAR">
+        <Code>BNE @PASS@;JMP @FAIL@</Code>
+        <Code>BEQ @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_SET">
+        <Code>BCS @PASS@;JMP @FAIL@</Code>
+        <Code>BCC @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_CLEAR">
+        <Code>BCC @PASS@;JMP @FAIL@</Code>
+        <Code>BCS @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="NEGATIVE">
+        <Code>BMI @PASS@;JMP @FAIL@</Code>
+        <Code>BPL @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="POSITIVE">
+        <Code>BPL @PASS@;JMP @FAIL@</Code>
+        <Code>BMI @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="true">
+        <Code>JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="false">
+        <Code>JMP @FAIL@</Code>
+      </Condition>      
+
+    </Conditions>
+
+    <!-- How to define bytes, words, and strings -->
+    <Data byte=".BYTE" word=".WORD" string=".BYTE"/>    
+
+    <!-- Direct code substitutions -->
+    <Substitutions>
+
+      <List name="REGSET_1" entries="X;Y"/>
+
+      <Sub key="C_FLAG=0" code="CLC"/> 
+      <Sub key="C_FLAG=1" code="SEC"/>
+      <Sub key="I_FLAG=0" code="CLI"/> 
+      <Sub key="I_FLAG=1" code="SEI"/>
+      <Sub key="D_FLAG=0" code="CLD"/> 
+      <Sub key="D_FLAG=1" code="SED"/>
+
+      <Sub key="A&gt;&gt;1" code="LSR A"/>
+      <Sub key="A&lt;&lt;1" code="ASL A"/>
+
+      <Sub key="A=A+C_FLAG+@OPERAND@" code="ADC @OPERAND@"/>
+      <Sub key="A=A-C_FLAG-@OPERAND@" code="SBC @OPERAND@"/>
+
+      <Sub key="A=A&amp;@OPERAND@"   code="AND @OPERAND@"/>
+      <Sub key="A=A|@OPERAND@"   code="ORA @OPERAND@"/>
+      <Sub key="A=A^@OPERAND@"   code="EOR @OPERAND@"/>
+      <Sub key="A=A+@OPERAND@"   code="CLC;ADC @OPERAND@"/>
+      <Sub key="A=A-@OPERAND@"   code="SEC;SBC @OPERAND@"/>
+
+      <Sub key="A=@OPERAND@" code="LDA @OPERAND@"/>       
+      <Sub key="@OPERAND@=A" code="STA @OPERAND@"/>
+
+      <Sub key="@REGSET_1@=@OPERAND@" code="LD@REGSET_1@ @OPERAND@"/>      
+      <Sub key="@OPERAND@=@REGSET_1@" code="ST@REGSET_1@ @OPERAND@"/>
+
+      <Sub key="++X" code="INX"/>
+      <Sub key="--X" code="DEX"/>
+      <Sub key="++Y" code="INY"/>
+      <Sub key="--Y" code="DEY"/>
+
+      <Sub key="++@OPERAND@" code="INC @OPERAND@"/>
+      <Sub key="--@OPERAND@" code="DEC @OPERAND@"/>      
+
+      <Sub key="X=A" code="TAX"/>
+      <Sub key="Y=A" code="TAY"/>
+      <Sub key="A=X" code="TXA"/>
+      <Sub key="A=Y" code="TYA"/>
+      <Sub key="S=X" code="TXS"/>
+      <Sub key="S=Y" code="TYS"/>
+ 
+    </Substitutions>
+
+  </Processor>
+
+<!--
+
+
+
+
+
+
+    XGS
+
+
+
+
+
+
+-->
+
+  <Processor name="XGS" call="CALL" return="RET" jump="JMP @PASS@">
+
+    <Modules>      
+      <Module>Number</Module>
+      <Module>Subroutines</Module>
+      <Module>Constants</Module>
+      <Module>Structures</Module>
+      <Module>Data</Module>
+      <Module>Flow</Module>
+      <Module>Substitutions</Module>
+    </Modules>
+
+    <Conditions left="true" right="true"> 
+
+      <Condition symbol="==">
+          <Code>CJE   @LEFT@, @RIGHT@, @PASS@;JMP @FAIL@</Code>
+          <Code>CJNE  @LEFT@, @RIGHT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="!=">
+          <Code>CJNE  @LEFT@, @RIGHT@, @PASS@;JMP @FAIL@</Code>
+          <Code>CJE   @LEFT@, @RIGHT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&lt;">
+          <Code>CJB   @LEFT@, @RIGHT@, @PASS@;JMP @FAIL@</Code>
+          <Code>CJAE  @LEFT@, @RIGHT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&lt;=">
+          <Code>CJBE  @LEFT@, @RIGHT@, @PASS@;JMP @FAIL@</Code>
+          <Code>CJA   @LEFT@, @RIGHT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;">
+          <Code>CJA   @LEFT@, @RIGHT@, @PASS@;JMP @FAIL@</Code>
+          <Code>CJBE  @LEFT@, @RIGHT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;=">
+          <Code>CJAE  @LEFT@, @RIGHT@, @PASS@;JMP @FAIL@</Code>
+          <Code>CJB   @LEFT@, @RIGHT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+    </Conditions>
+
+    <Conditions left="false" right="false">            
+
+      <Condition symbol="CARRY_SET">
+          <Code>JC    @PASS@;JMP @FAIL@</Code>
+          <Code>JNC   @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_CLEAR">
+          <Code>JNC   @PASS@;JMP @FAIL@</Code>
+          <Code>JC    @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="ZERO_SET">
+          <Code>JZ  @PASS@;JMP @FAIL@</Code>
+          <Code>JNZ @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="ZERO_CLEAR">
+          <Code>JNZ @PASS@;JMP @FAIL@</Code>
+          <Code>JZ  @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="true">
+        <Code>JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="false">
+        <Code>JMP @FAIL@</Code>
+      </Condition>
+
+    </Conditions>
+
+    <Conditions left="true" right="false">
+      
+      <Condition symbol="BIT_SET">
+          <Code>JB  @LEFT@, @PASS@;JMP @FAIL@</Code>
+          <Code>JNB @LEFT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="BIT_CLEAR">
+          <Code>JNB @LEFT@, @PASS@;JMP @FAIL@</Code>
+          <Code>JB  @LEFT@, @FAIL@;JMP @PASS@</Code>
+      </Condition>
+
+      <!-- Decrement and increment instructions (for while loops) -->
+
+      <Condition symbol="DEC_NOT_ZERO">
+          <Code>DJNZ @LEFT@, @PASS@;JMP @FAIL@</Code>
+      </Condition>
+
+      <Condition symbol="INC_NOT_ZERO">
+          <Code>IJNZ @LEFT@, @PASS@;JMP @FAIL@</Code>      
+      </Condition>
+
+    </Conditions>  
+
+  </Processor>
+
+<!--
+
+
+
+
+
+
+    Z80
+
+
+
+
+
+
+-->
+
+  <Processor name="Z80" call="CALL @PASS@" return="RET" jump="JP  @PASS@">
+
+    <Modules>      
+      <Module>Number</Module>
+      <Module>Subroutines</Module>
+      <Module>Constants</Module>
+      <Module>Structures</Module>
+      <Module>Data</Module>
+      <Module>Flow</Module>
+      <Module>Substitutions</Module>
+    </Modules>
+
+    <Conditions left="true" right="true">      
+
+      <!-- Z80 has only one compare ... compare to the accumulator -->
+
+      <Compare left="A" code="CP  @RIGHT@"/>                        
+
+      <Condition symbol="==">
+        <Code>@COMPARE@;JP  Z,@PASS@;JP  @FAIL@</Code>
+        <Code>@COMPARE@;JP NZ,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="!=">
+        <Code>@COMPARE@;JP NZ,@PASS@;JP  @FAIL@</Code>
+        <Code>@COMPARE@;JP  Z,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+      
+      <Condition symbol="&lt;">
+        <Code>@COMPARE@;JP Z,@FAIL@;JP NC,@PASS@;JP @FAIL@</Code>
+        <Code>@COMPARE@;JP Z,@FAIL@;JP  C,@FAIL@;JP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;=">
+        <Code>@COMPARE@;JP Z,@PASS@;JP  C,@PASS@;JP @FAIL@</Code>
+        <Code>@COMPARE@;JP Z,@PASS@;JP NC,@FAIL@;JP @PASS@</Code>        
+      </Condition>
+
+      <Condition symbol="&lt;=">
+        <Code>@COMPARE@;JP NC,@PASS@;JP @FAIL@</Code>
+        <Code>@COMPARE@;JP  C,@FAIL@;JP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;">
+        <Code>@COMPARE@;JP  C,@PASS@;JP @FAIL@</Code>
+        <Code>@COMPARE@;JP NC,@FAIL@;JP @PASS@</Code>
+      </Condition>
+
+    </Conditions>
+
+    <Conditions left="false" right="false">
+
+      <Condition symbol="ZERO_SET">
+        <Code>JP  Z,@PASS@;JP  @FAIL@</Code>
+        <Code>JP NZ,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="ZERO_CLEAR">
+        <Code>JP NZ,@PASS@;JP  @FAIL@</Code>
+        <Code>JP  Z,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_SET">
+        <Code>JP  C,@PASS@;JP  @FAIL@</Code>
+        <Code>JP NC,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_CLEAR">
+        <Code>JP NC,@PASS@;JP  @FAIL@</Code>
+        <Code>JP  C,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="SIGN_SET">
+        <Code>JP  P,@PASS@;JP  @FAIL@</Code>
+        <Code>JP  M,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="SIGN_CLEAR">
+        <Code>JP  P,@PASS@;JP  @FAIL@</Code>
+        <Code>JP  M,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="PARITY_EVEN">
+        <Code>JP  PE,@PASS@;JP  @FAIL@</Code>
+        <Code>JP  PO,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="PARITY_ODD">
+        <Code>JP  PO,@PASS@;JP  @FAIL@</Code>
+        <Code>JP  PE,@FAIL@;JP  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="DEC_B_NOT_ZERO">
+        <Code>DJNZ @PASS@;JP  @FAIL@</Code>
+      </Condition>
+
+	  <Condition symbol="true">
+	    <Code>JP  @PASS@</Code>
+	  </Condition>
+
+	  <Condition symbol="false">
+	    <Code>JP  @FAIL@</Code>
+	  </Condition>
+
+    </Conditions>
+
+  </Processor>
+
+<!--
+
+
+
+
+
+
+    S1C88
+
+
+
+
+
+
+-->
+
+  <Processor name="S1C88" call="CALL @PASS@" return="RET" jump="JR @PASS@">
+
+    <Modules>      
+      <Module>Number</Module>
+      <Module>Subroutines</Module>
+      <Module>Constants</Module>
+      <Module>Structures</Module>
+      <Module>Data</Module>
+      <Module>Flow</Module>
+      <Module>Substitutions</Module>
+    </Modules>
+
+    <Conditions left="true" right="true">
+	  
+	  <Condition symbol="==">
+	    <Code>CP @LEFT@,@RIGHT@;JR  Z,@PASS@;JR @FAIL@</Code>
+		<Code>CP @LEFT@,@RIGHT@;JR NZ,@FAIL@;JR @PASS@</Code>
+	  </Condition>
+
+	  <Condition symbol="!=">
+        <Code>CP @LEFT@,@RIGHT@;JR NZ,@PASS@;JR  @FAIL@</Code>
+        <Code>CP @LEFT@,@RIGHT@;JR  Z,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&lt;">
+        <Code>CP @LEFT@,@RIGHT@;JR Z,@FAIL@;JR NC,@PASS@;JP @FAIL@</Code>
+        <Code>CP @LEFT@,@RIGHT@;JR Z,@FAIL@;JR  C,@FAIL@;JP @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;=">
+        <Code>CP @LEFT@,@RIGHT@;JR Z,@PASS@;JR  C,@PASS@;JP @FAIL@</Code>
+        <Code>CP @LEFT@,@RIGHT@;JR Z,@PASS@;JR NC,@FAIL@;JP @PASS@</Code>        
+      </Condition>
+
+      <Condition symbol="&lt;=">
+        <Code>CP @LEFT@,@RIGHT@;JR NC,@PASS@;JR @FAIL@</Code>
+        <Code>CP @LEFT@,@RIGHT@;JR  C,@FAIL@;JR @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;">
+        <Code>CP @LEFT@,@RIGHT@;JR  C,@PASS@;JR @FAIL@</Code>
+        <Code>CP @LEFT@,@RIGHT@;JR NC,@FAIL@;JR @PASS@</Code>
+      </Condition>      
+
+	</Conditions>
+
+	<Conditions left="false" right="false">
+
+      <Condition symbol="ZERO_SET">
+        <Code>JR  Z,@PASS@;JR  @FAIL@</Code>
+        <Code>JR NZ,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="ZERO_CLEAR">
+        <Code>JR NZ,@PASS@;JR  @FAIL@</Code>
+        <Code>JR  Z,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_SET">
+        <Code>JR  C,@PASS@;JR  @FAIL@</Code>
+        <Code>JR NC,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_CLEAR">
+        <Code>JR NC,@PASS@;JR  @FAIL@</Code>
+        <Code>JR  C,@FAIL@;JR  @PASS@</Code>
+      </Condition>      
+
+	  <Condition symbol="POSITIVE">
+        <Code>JR P,@PASS@;JR  @FAIL@</Code>
+        <Code>JR M,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="NEGATIVE">
+        <Code>JR M,@PASS@;JR  @FAIL@</Code>
+        <Code>JR P,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="OVERFLOW">
+        <Code>JR  V,@PASS@;JR  @FAIL@</Code>
+        <Code>JR NV,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="NOT_OVERFLOW">
+        <Code>JR NV,@PASS@;JR  @FAIL@</Code>
+        <Code>JR  V,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="F0_SET">
+        <Code>JR  F0,@PASS@;JR  @FAIL@</Code>
+        <Code>JR NF0,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="F1_SET">
+        <Code>JR  F1,@PASS@;JR  @FAIL@</Code>
+        <Code>JR NF1,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="F2_SET">
+        <Code>JR  F2,@PASS@;JR  @FAIL@</Code>
+        <Code>JR NF2,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="F0_CLEAR">
+        <Code>JR NF0,@PASS@;JR  @FAIL@</Code>
+        <Code>JR  F0,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="F1_CLEAR">
+        <Code>JR NF1,@PASS@;JR  @FAIL@</Code>
+        <Code>JR  F1,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+	  <Condition symbol="F2_CLEAR">
+        <Code>JR NF2,@PASS@;JR  @FAIL@</Code>
+        <Code>JR  F2,@FAIL@;JR  @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="DEC_B_NOT_ZERO">
+        <Code>DJR NZ,@PASS@;JR  @FAIL@</Code>
+      </Condition>
+
+	  <Condition symbol="true">
+	    <Code>JR  @PASS@</Code>
+	  </Condition>
+
+	  <Condition symbol="false">
+	    <Code>JR  @FAIL@</Code>
+	  </Condition>
+
+    </Conditions>
+
+  </Processor>
+
+<!--
+
+
+
+
+
+
+    6809
+
+
+
+
+
+
+-->
+
+  <Processor name="6809" call="LBSR @PASS@" return="RTS" jump="LBRA  @PASS@"> 
+
+    <Modules>      
+      <Module>Number</Module>
+      <Module>Subroutines</Module>
+      <Module>Constants</Module>
+      <Module>Structures</Module>
+      <Module>Data</Module>
+      <Module>Flow</Module>
+      <Module>Substitutions</Module>
+    </Modules>
+  
+    <!-- LEFT-OP-RIGHT conditions like "A!=5" -->
+
+    <Conditions left="true" right="true">      
+
+      <Compare left="A" code="CMPA  @RIGHT@"/>
+      <Compare left="B" code="CMPB  @RIGHT@"/>
+      <Compare left="D" code="CMPD  @RIGHT@"/>   
+      <Compare left="X" code="CMPX  @RIGHT@"/>
+      <Compare left="Y" code="CMPY  @RIGHT@"/>
+      <Compare left="U" code="CMPU  @RIGHT@"/>                  
+
+      <!-- EQUAL and NOT-EQUAL -->
+
+      <Condition symbol="==">
+        <Code>@COMPARE@;LBEQ @PASS@;LBRA @FAIL@</Code>
+        <Code>@COMPARE@;LBNE @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="!=">
+        <Code>@COMPARE@;LBNE @PASS@;LBRA @FAIL@</Code>
+        <Code>@COMPARE@;LBEQ @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <!-- Unsigned compares -->
+
+      <Condition symbol="&lt;">
+        <Code>@COMPARE@;LBLT @PASS@;LBRA @FAIL@</Code>
+        <Code>@COMPARE@;LBGE @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;=">
+        <Code>@COMPARE@;LBGE @PASS@;LBRA @FAIL@</Code>
+        <Code>@COMPARE@;LBLT @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&lt;=">
+        <Code>@COMPARE@;LBLE @PASS@;LBRA @FAIL@</Code>
+        <Code>@COMPARE@;LBGT @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="&gt;">
+        <Code>@COMPARE@;LBGT @PASS@;LBRA @FAIL@</Code>
+        <Code>@COMPARE@;LBLE @FAIL@;LBRA @PASS@</Code>
+      </Condition>  
+
+    </Conditions>  
+
+    <!-- no-operand conditions like flag-checks, true, and false -->
+
+    <Conditions left="false" right="false">
+
+      <Condition symbol="ZERO_SET">
+        <Code>LBEQ @PASS@;LBRA @FAIL@</Code>
+        <Code>LBNE @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="ZERO_CLEAR">
+        <Code>LBNE @PASS@;LBRA @FAIL@</Code>
+        <Code>LBEQ @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_SET">
+        <Code>LBCS @PASS@;LBRA @FAIL@</Code>
+        <Code>LBCC @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="CARRY_CLEAR">
+        <Code>LBCC @PASS@;LBRA @FAIL@</Code>
+        <Code>LBCS @FAIL@;LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="true">
+        <Code>LBRA @PASS@</Code>
+      </Condition>
+
+      <Condition symbol="false">
+        <Code>LBRA @PASS@</Code>
+      </Condition>      
+
+    </Conditions>
+
+    <Substitutions>
+
+      <List name="REGSET_1" entries="A;B;D;X;Y;U;S"/>
+
+      <Sub key="@REGSET_1@=@OPERAND@" code="LD@REGSET_1@ @OPERAND@"/>      
+      <Sub key="@OPERAND@=@REGSET_1@" code="ST@REGSET_1@ @OPERAND@"/>
+
+      <Sub key="++@OPERAND@" code="INC @OPERAND@"/>
+      <Sub key="--@OPERAND@" code="DEC @OPERAND@"/>
+
+      <Sub key="++X" code="LEAX 1,X"/>
+      <Sub key="--X" code="LEAX -1,X"/>
+      <Sub key="++Y" code="LEAY 1,Y"/>
+      <Sub key="--Y" code="LEAY -1,Y"/>
+      <Sub key="++U" code="LEAU 1,U"/>
+      <Sub key="--U" code="LEAU -1,U"/>
+
+      <Sub key="A=B" code="TFR A,B"/>
+      <Sub key="B=A" code="TFR A,B"/>
+      <Sub key="D=X" code="TFR A,B"/>
+      <Sub key="D=Y" code="TFR A,B"/>
+      <Sub key="D=U" code="TFR A,B"/>
+      <Sub key="D=S" code="TFR A,B"/>
+      <Sub key="X=D" code="TFR A,B"/>
+      <Sub key="X=Y" code="TFR A,B"/>
+      <Sub key="X=U" code="TFR A,B"/>
+      <Sub key="X=S" code="TFR A,B"/>
+      <Sub key="Y=D" code="TFR A,B"/>
+      <Sub key="Y=X" code="TFR A,B"/>
+      <Sub key="Y=U" code="TFR A,B"/>
+      <Sub key="Y=S" code="TFR A,B"/>
+      <Sub key="U=D" code="TFR A,B"/>
+      <Sub key="U=Y" code="TFR A,B"/>
+      <Sub key="U=X" code="TFR A,B"/>
+      <Sub key="U=S" code="TFR A,B"/>
+      <Sub key="S=D" code="TFR A,B"/>
+      <Sub key="S=Y" code="TFR A,B"/>
+      <Sub key="S=U" code="TFR A,B"/>
+      <Sub key="S=X" code="TFR A,B"/>
+ 
+    </Substitutions>
+
+  </Processor>
+
+</BlendConfiguration>

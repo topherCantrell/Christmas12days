@@ -1,0 +1,98 @@
+
+define LED_MEMORY = 0xF00
+
+define ptr        = 0xE00
+
+define value      = 0xE02
+define x          = 0xE03
+define y          = 0xE04
+define width      = 0xE05
+define height     = 0xE06
+
+define cx         = 0xE07
+define cy         = 0xE08
+define ct         = 0xE09
+
+SetCanvas LED_MEMORY, FillWith=0
+
+$value = 2
+$width = 5
+$height = 5
+$x = 8
+$y = 8
+
+call SevenSegment
+
+RenderCanvas LED_MEMORY
+
+STOP
+
+// ----------------------------------------------------------
+SevenSegment:
+
+WORD$ptr = @LEDSegmentTable
+$value = $value & 0x0F
+WORD$ptr = WORD$ptr + $value
+$value = CODE[ptr]
+
+MoveTo $x,$y
+$cx = $x + $width
+$cy = $y
+Color $value
+call LineOrMove
+$cy = $cy + $height
+$value = $value >> 1
+Color $value
+call LineOrMove
+$cy = $cy + $height
+$value = $value >> 1
+Color $value
+call LineOrMove
+$cx = $cx - $width
+$value = $value >> 1
+Color $value
+call LineOrMove
+$cy = $cy - $height
+$value = $value >> 1 
+Color $value
+call LineOrMove
+$cy = $cy - $height
+$value = $value >> 1
+Color $value
+call LineOrMove
+$cy = $cy + $height
+MoveTo $cx,$cy
+$cx = $cx + $width
+$value = $value >> 1
+Color $value
+call LineOrMove
+
+return
+
+LineOrMove:
+$ct = $value & 1
+if($ct == 1) {
+  LineTo $cx,$cy
+} else {
+  MoveTo $cx,$cy
+}
+return
+
+LEDSegmentTable:
+
+# 0b_0_0111111 // 0
+# 0b_0_0000110 // 1
+# 0b_0_1011011 // 2
+# 0b_0_1001111 // 3
+# 0b_0_1100110 // 4
+# 0b_0_1101101 // 5
+# 0b_0_1111100 // 6
+# 0b_0_0000111 // 7
+# 0b_0_1111111 // 8
+# 0b_0_1100111 // 9
+# 0b_0_1110111 // A
+# 0b_0_1111100 // b
+# 0b_0_0111001 // C
+# 0b_0_1011110 // d
+# 0b_0_1111001 // E
+# 0b_0_1110001 // F

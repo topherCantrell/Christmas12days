@@ -1,0 +1,293 @@
+; The 12 Days of Christmas
+;
+; The song is constructed from repeated segments that build day by day. The includes below
+; pull in the fames and song-fragments in the proper order.
+;
+
+FRAMES_PER_CLUSTER=18
+
+; 1
+dayON.txt
+day1.txt
+
+; 2
+dayON.txt
+day2.txt
+day1.txt
+
+; 3
+dayON.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 4
+dayON.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 5
+dayON.txt
+day5.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 6
+dayON.txt
+day6.txt
+day5.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 7
+dayON.txt
+day7.txt
+day6.txt
+day5.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 8
+dayON.txt
+day8.txt
+day7.txt
+day6.txt
+day5.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 9
+dayON.txt
+day9.txt
+day8.txt
+day7.txt
+day6.txt
+day5.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 10
+dayON.txt
+day10.txt
+day9.txt
+day8.txt
+day7.txt
+day6.txt
+day5.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 11
+dayON.txt
+day11.txt
+day10.txt
+day9.txt
+day8.txt
+day7.txt
+day6.txt
+day5.txt
+day4.txt
+day3.txt
+day2.txt
+day1.txt
+
+; 12
+dayON.txt ; 18
+day12.txt ; 6
+day11.txt ; 6
+day10.txt ; 6
+day9.txt  ; 6
+day8.txt  ; 6
+day7.txt  ; 6
+day6.txt  ; 6
+day5.txt  ; 16
+day4.txt  ; 6
+day3.txt  ; 6
+day2.txt  ; 8
+day1.txt  ; 14
+
+; The music has more fragments. The "days" 4, 3, and 2 have different forms. There is also
+; a pickup note "a" in the first pass.
+
+Music12Days.txt OnTheFirst
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt TwoBefore
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt ThreeBefore
+Music12Days.txt TwoBefore
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt FourBefore
+Music12Days.txt ThreeBefore
+Music12Days.txt TwoBefore
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt Five
+Music12Days.txt FourAfter
+Music12Days.txt ThreeAfter
+Music12Days.txt TwoAfter
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt SixThroughTwelve ;6
+Music12Days.txt Five
+Music12Days.txt FourAfter
+Music12Days.txt ThreeAfter
+Music12Days.txt TwoAfter
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt SixThroughTwelve ;7
+Music12Days.txt SixThroughTwelve ;6
+Music12Days.txt Five
+Music12Days.txt FourAfter
+Music12Days.txt ThreeAfter
+Music12Days.txt TwoAfter
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt SixThroughTwelve ;8
+Music12Days.txt SixThroughTwelve ;7
+Music12Days.txt SixThroughTwelve ;6
+Music12Days.txt Five
+Music12Days.txt FourAfter
+Music12Days.txt ThreeAfter
+Music12Days.txt TwoAfter
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt SixThroughTwelve ;9
+Music12Days.txt SixThroughTwelve ;8
+Music12Days.txt SixThroughTwelve ;7
+Music12Days.txt SixThroughTwelve ;6
+Music12Days.txt Five
+Music12Days.txt FourAfter
+Music12Days.txt ThreeAfter
+Music12Days.txt TwoAfter
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt SixThroughTwelve ;10
+Music12Days.txt SixThroughTwelve ;9
+Music12Days.txt SixThroughTwelve ;8
+Music12Days.txt SixThroughTwelve ;7
+Music12Days.txt SixThroughTwelve ;6
+Music12Days.txt Five
+Music12Days.txt FourAfter
+Music12Days.txt ThreeAfter
+Music12Days.txt TwoAfter
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup
+Music12Days.txt SixThroughTwelve ;11
+Music12Days.txt SixThroughTwelve ;10
+Music12Days.txt SixThroughTwelve ;9
+Music12Days.txt SixThroughTwelve ;8
+Music12Days.txt SixThroughTwelve ;7
+Music12Days.txt SixThroughTwelve ;6
+Music12Days.txt Five
+Music12Days.txt FourAfter
+Music12Days.txt ThreeAfter
+Music12Days.txt TwoAfter
+Music12Days.txt One
+
+Music12Days.txt OnTheFirstNoPickup    ; 18    ; 110
+Music12Days.txt SixThroughTwelve ;12  ; 6
+Music12Days.txt SixThroughTwelve ;11  ; 6
+Music12Days.txt SixThroughTwelve ;10  ; 6
+Music12Days.txt SixThroughTwelve ;9   ; 6
+Music12Days.txt SixThroughTwelve ;8   ; 6
+Music12Days.txt SixThroughTwelve ;7   ; 6
+Music12Days.txt SixThroughTwelve ;6   ; 6
+Music12Days.txt Five                  ; 16
+Music12Days.txt FourAfter             ; 6
+Music12Days.txt ThreeAfter            ; 6
+Music12Days.txt TwoAfter              ; 8
+Music12Days.txt One                   ; 14
+
+; Envelope patterns
+
+; 256 delay is 25ms
+
+% Envelopes
+
+8:Stop
+
+0:Stop
+
+15:64
+14:64
+13:64
+12:64
+11:64
+10:64
+ 9:64
+ 8:64
+ 7:64
+ 6:64
+ 5:64
+ 4:64
+ 3:64
+ 2:64
+ 1:64
+ 0:Stop
+
+15:128
+14:128
+13:128
+12:128
+11:128
+10:128
+ 9:128
+ 8:128
+ 7:128
+ 6:128
+ 5:128
+ 4:128
+ 3:128
+ 2:128
+ 1:128
+ 0:Stop
+
+15:32
+14:32
+13:32
+12:32
+11:32
+10:32
+ 9:32
+ 8:32
+ 7:32
+ 6:32
+ 5:32
+ 4:32
+ 5:32
+ 6:32
+ 7:32
+ 8:32
+Back:8
+
+
+
+
+
