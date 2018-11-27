@@ -1,8 +1,13 @@
 # The Twelve Days of Christmas Movie Project
 
+## Published in Circuit Cellar, June 2010
+
+## Youtube
 https://www.youtube.com/watch?v=WiH14WjoCHw
 
-TODO this is the original
+![](art/schematic.jpg)
+
+![](art/system.jpg)
 
 The "buildscripts.bat" file assembles the two engine files. The output is "a.spin" and "b.spin" (text files) should be pasted
 into the BOOT.SPIN file.
