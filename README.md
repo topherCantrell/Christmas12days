@@ -1,8 +1,11 @@
 # The Twelve Days of Christmas Movie Project
 
-### Published in Circuit Cellar, June 2010
+### As Seen In Circuit Cellar Magazine
+[![](art/circuitcellar.jpg)](https://circuitcellar.com/)<br>
+https://cc-webshop.com/products/circuit-cellar-issue-239-june-2010-pdf
 
-### Youtube
+### As seen on Youtube
+[![](art/youtube.jpg)](https://www.youtube.com/) <br>
 https://www.youtube.com/watch?v=WiH14WjoCHw
 
 ## Schematic
